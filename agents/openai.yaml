@@ -1,0 +1,4 @@
+interface:
+  display_name: "未知代码安全扫描"
+  short_description: "离线检查未知仓库、Git Hook 与危险自动执行入口"
+  default_prompt: "Use $scan-untrusted-code to scan this untrusted repository without executing its code and produce a risk report."

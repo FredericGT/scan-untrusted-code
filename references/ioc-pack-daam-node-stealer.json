@@ -1,0 +1,70 @@
+{
+  "name": "daam-node-stealer",
+  "version": 1,
+  "description": "Indicators observed in the macOS Git post-checkout Node stealer case.",
+  "indicators": [
+    {
+      "rule_id": "IOC-DAAM-DOMAIN",
+      "type": "content",
+      "value": "iploglab.store",
+      "severity": "critical",
+      "rationale": "Remote bootstrap and loader domain from the investigated case."
+    },
+    {
+      "rule_id": "IOC-DAAM-C2-IP",
+      "type": "content",
+      "value": "153.75.94.94",
+      "severity": "critical",
+      "rationale": "External communication address from the investigated case."
+    },
+    {
+      "rule_id": "IOC-DAAM-LOADER",
+      "type": "path_or_content",
+      "value": "daam-connect-runner",
+      "severity": "critical",
+      "rationale": "Temporary JavaScript loader name from the investigated case."
+    },
+    {
+      "rule_id": "IOC-DAAM-WORKER",
+      "type": "path_or_content",
+      "value": "daam-extra-",
+      "severity": "critical",
+      "rationale": "Worker staging directory prefix from the investigated case."
+    },
+    {
+      "rule_id": "IOC-DAAM-UPLOAD-STAGING",
+      "type": "path_or_content",
+      "value": ".tmp/.upload_",
+      "severity": "high",
+      "rationale": "Sensitive-file staging directory pattern from the investigated case."
+    },
+    {
+      "rule_id": "IOC-DAAM-NODE-STDIN",
+      "type": "content",
+      "value": "--max-old-space-size=4096 --no-warnings -",
+      "severity": "high",
+      "rationale": "Node stdin execution command observed in the investigated case."
+    },
+    {
+      "rule_id": "IOC-DAAM-PORT-8085",
+      "type": "content",
+      "value": "8085",
+      "severity": "medium",
+      "rationale": "Observed external data-channel port; require contextual review."
+    },
+    {
+      "rule_id": "IOC-DAAM-PORT-8086",
+      "type": "content",
+      "value": "8086",
+      "severity": "medium",
+      "rationale": "Observed external auxiliary-channel port; require contextual review."
+    },
+    {
+      "rule_id": "IOC-DAAM-PORT-8087",
+      "type": "content",
+      "value": "8087",
+      "severity": "medium",
+      "rationale": "Observed external worker-channel port; require contextual review."
+    }
+  ]
+}
