@@ -846,7 +846,7 @@ def scan(path: Path, max_files: int, max_file_bytes: int, indicators: list[dict]
                 digest.update(chunk)
         artifact_hash = digest.hexdigest()
     return {
-        "scanner": {"name": "scan-untrusted-code", "version": "1.1"},
+        "scanner": {"name": "scan-untrusted-code", "version": "1.1.1"},
         "target": {"path": str(path.resolve()), "sha256": artifact_hash},
         "verdict": verdict,
         "risk_score": score,

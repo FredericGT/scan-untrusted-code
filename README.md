@@ -76,13 +76,14 @@ python3 ~/.codex/skills/scan-untrusted-code/scripts/scan_untrusted_code.py \
 | `sandbox_only` | 存在高风险能力或执行入口 | 不要在工作终端运行 |
 | `block` | 命中可执行的 Critical 信号或明确恶意行为链 | 禁止运行并升级安全团队 |
 
-V1.1 不再仅凭累计分数触发 `block`。文档、CI、Issue 模板、测试和 `.gitignore` 等上下文会被降权；阻断需要可执行的 Critical 信号、明确行为链、关键 IOC 或归档安全问题。
+V1.1.1 不再仅凭累计分数触发 `block`。文档、CI、Issue 模板、测试和 `.gitignore` 等上下文会被降权；阻断需要可执行的 Critical 信号、明确行为链、关键 IOC 或归档安全问题。
 
 ## 目录结构
 
 ```text
 scan-untrusted-code/
 ├── SKILL.md
+├── VERSION
 ├── README.md
 ├── agents/
 │   └── openai.yaml
@@ -92,6 +93,7 @@ scan-untrusted-code/
 │   ├── risk-model.md
 │   └── sandbox-baseline.md
 ├── scripts/
+│   ├── ci_check.py
 │   └── scan_untrusted_code.py
 └── tests/
     └── test_scan_untrusted_code.py
@@ -108,6 +110,14 @@ scan-untrusted-code/
 扫描结果不会直接声称“数据已经泄露”或“仓库绝对安全”。
 
 ## 验证
+
+运行本地一键质量检查：
+
+```bash
+python3 scripts/ci_check.py
+```
+
+该检查会验证 Skill 元数据、编译 Skill 自身的 Python 文件并运行回归测试；不会执行被扫描仓库的代码。
 
 运行回归测试：
 
@@ -132,7 +142,7 @@ python3 /Users/yuanjuntao/.codex/skills/.system/skill-creator/scripts/quick_vali
 
 ## 当前限制
 
-V1.1 仍是离线静态扫描器，暂未自动完成：
+V1.1.1 仍是离线静态扫描器，暂未自动完成：
 
 - GitHub、npm、PyPI 仓库信誉查询
 - 依赖漏洞解析
