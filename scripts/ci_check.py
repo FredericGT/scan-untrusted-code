@@ -3,9 +3,10 @@
 
 from __future__ import annotations
 
+import os
+import json
 import py_compile
 import re
-import os
 import subprocess
 import sys
 import tempfile
@@ -37,6 +38,25 @@ def check_python() -> None:
             py_compile.compile(path, cfile=output_dir / f"module-{index}.pyc", doraise=True)
 
 
+def check_report_version() -> None:
+    version = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
+    with tempfile.TemporaryDirectory(prefix="scan-skill-fixture-") as temp:
+        target = Path(temp) / "benign.txt"
+        target.write_text("synthetic control fixture\n", encoding="utf-8")
+        command = [
+            sys.executable,
+            str(ROOT / "scripts" / "scan_untrusted_code.py"),
+            str(target),
+            "--format",
+            "json",
+            "--exit-zero",
+        ]
+        result = subprocess.run(command, cwd=ROOT, capture_output=True, text=True, check=True)
+        report = json.loads(result.stdout)
+        if report.get("scanner", {}).get("version") != version:
+            raise SystemExit("VERSION does not match the scanner report version")
+
+
 def run_tests() -> None:
     env = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1"}
     command = [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-p", "test_*.py", "-v"]
@@ -47,6 +67,7 @@ def run_tests() -> None:
 def main() -> int:
     check_metadata()
     check_python()
+    check_report_version()
     run_tests()
     print(f"PASS: {ROOT.name} local CI")
     return 0

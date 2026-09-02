@@ -155,3 +155,83 @@ V1.1.1 仍是离线静态扫描器，暂未自动完成：
 ## Repository
 
 [FredericGT/scan-untrusted-code](https://github.com/FredericGT/scan-untrusted-code)
+
+---
+
+## English documentation
+
+`scan-untrusted-code` is a Codex Skill and standalone Python scanner for
+reviewing an unfamiliar repository, source tree, script, ZIP, TAR, or package
+before it is executed. It performs offline, read-only inspection and produces
+an evidence-backed Markdown and JSON risk report.
+
+### Features
+
+- Inspects directories, individual files, ZIP/TAR archives, and common compressed TAR formats without extracting or executing them.
+- Reviews Git hooks, `.git/config`, npm lifecycle scripts, IDE tasks, and other automatic-execution surfaces.
+- Detects remote download-and-execute chains, inline interpreters, dynamic evaluation, staging and cleanup behavior.
+- Checks references to browser stores, macOS Keychain, SSH, cloud credentials, Git credentials, wallets, and clipboard data.
+- Detects archive path traversal, symbolic/hard links, oversized files, and suspicious persistence references.
+- Loads the bundled daam Node-stealer IOC pack by default and accepts additional JSON IOC packs.
+- Emits explainable verdicts: `low_indicators`, `manual_review`, `sandbox_only`, or `block`.
+
+### Safety model
+
+The scanner never executes, installs, builds, imports, checks out, or opens the
+target code. A low-risk result means only that the configured static rules did
+not find a known high-risk indicator; it is not proof that the artifact is safe.
+Dynamic validation, if required, must be performed separately in a disposable,
+isolated environment with no corporate credentials.
+
+### Codex usage
+
+```text
+Use $scan-untrusted-code to scan this unknown repository.
+Perform static analysis only, do not execute its code, and produce a Markdown and JSON risk report.
+```
+
+### Command-line usage
+
+```bash
+python3 scripts/scan_untrusted_code.py \
+  /absolute/path/to/artifact \
+  --format both \
+  --output-dir /tmp/untrusted-code-report \
+  --exit-zero
+```
+
+Use `--no-default-ioc-pack` for a generic control test or repeat
+`--ioc-pack /absolute/path/to/pack.json` to add an approved custom pack.
+
+### Interpreting results
+
+- `low_indicators`: no configured high-risk indicator was found.
+- `manual_review`: contextual or medium-severity indicators require review.
+- `sandbox_only`: high-risk capability or execution surface requires isolation.
+- `block`: an actionable critical indicator, behavior chain, IOC, or archive safety issue was found.
+
+The report distinguishes static `Confirmed` evidence, `High Confidence`
+behavior combinations, and runtime outcomes that remain `Not Confirmed`.
+
+### Local validation
+
+```bash
+python3 scripts/ci_check.py
+```
+
+This validates Skill metadata, compiles the Skill's own Python files, and runs
+the non-executing regression suite. GitHub Actions runs the same command.
+
+### Threat-intelligence notice
+
+The bundled daam IOC pack contains case-observed threat-intelligence indicators
+such as a domain, IP address, ports, and temporary path patterns. It contains
+no credentials, employee data, or private incident logs. Do not add confidential
+company indicators to a public fork; keep those in an access-controlled overlay.
+
+### Portability
+
+The `SKILL.md` file provides Codex-specific orchestration. The Python scanner,
+IOC JSON format, and references can also be used by other AI assistants or
+automation systems that explicitly load these files; `$scan-untrusted-code` is
+not a universal cross-model command.

@@ -3,7 +3,7 @@ name: scan-untrusted-code
 description: Safely assess an untrusted local repository, source tree, script, ZIP, or TAR archive before execution. Use when Codex needs to inspect unknown code or tools, review Git hooks and package lifecycle scripts, detect remote-download-and-execute chains, credential/browser/keychain/wallet access, suspicious networking or cleanup behavior, apply the daam Node-stealer IOC pack, recommend sandbox controls, or produce a pre-execution security gate report. Never execute, install, build, test, import, or check out the target code.
 ---
 
-# Scan Untrusted Code (V1.1.1)
+# Scan Untrusted Code (V1.1.2)
 
 Perform an offline, read-only security gate before unknown code is opened or run in a trusted environment. Treat a low finding count as “no known high-risk indicator found,” never as proof of safety.
 
